@@ -2,7 +2,7 @@ const stateMap = {
   "qe": [
     {
       nextState: "q1",
-      error: "Tipo de variable no válido",
+      error: "Palabra reservada mal escrita",
       rule: /^(int|float|bool|string)$/,
     },
     {
@@ -15,7 +15,12 @@ const stateMap = {
       error: "Nombre de variable no válido",
       rule: /^(\(".*?"\)\.write$|\([a-z][a-z0-9_]*\)\.write)$/,
     },
-    
+    {
+      nextState: "q2",
+      error: "Palabra reservada mal escrita",
+      rule: /^(fnc)$/,
+    },
+
   ],
   "q1": [
     {
@@ -24,6 +29,39 @@ const stateMap = {
       rule: /^[a-z][a-z0-9_]*$/,
     },
   ],
+  "q2":[
+    {
+      nextState: "q3",
+      error: "Nombre de variable no válido",
+      rule: /^[a-z][a-z0-9_]*$/,
+    }
+  ],
+  "q3":[
+    {
+      nextState: "q4",
+      error: "Nombre de variable no válido",
+      rule: /^\(\)\{$/,
+    }
+  ],
+  "q4": [
+    {
+      nextState: "q5",
+      error: "Nombre de variable no válido",
+      rule: /^([a-z][a-z0-9_]*)(.read)$/,
+    },
+    {
+      nextState: "q5",
+      error: "Nombre de variable no válido",
+      rule: /^(\(".*?"\)\.write$|\([a-z][a-z0-9_]*\)\.write)$/,
+    },
+  ],
+  "q5": [
+    {
+      nextState: "qff",
+      error: "Nombre de variable no válido",
+      rule: /^\}$/,
+    },
+  ]
  };
 
 function validateVariableDeclaration(input) {
@@ -52,6 +90,9 @@ function validateVariableDeclaration(input) {
   } 
   if (currentState === "qfw") {
     return "Escribir variable válido";
+  } 
+  if (currentState === "qff") {
+    return "Declaración de función válido";
   } 
   else {
     return `Error: ${currentState}: ${stateMap[currentState][0].error}`;
