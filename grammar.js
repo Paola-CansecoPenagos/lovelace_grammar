@@ -10,6 +10,12 @@ const stateMap = {
       error: "Nombre de variable no válido",
       rule: /^([a-z][a-z0-9_]*)(.read)$/,
     },
+    {
+      nextState: "qfw",
+      error: "Nombre de variable no válido",
+      rule: /^\(".*?"\)\.write$|^\(".*?"\s+.*?"\)\.write$/,
+    },
+    
   ],
   "q1": [
     {
@@ -42,7 +48,10 @@ function validateVariableDeclaration(input) {
     return "Declaración de variable válida";
   } 
   if (currentState === "qfr") {
-    return "leer variable válido";
+    return "Leer variable válido";
+  } 
+  if (currentState === "qfw") {
+    return "Escribir variable válido";
   } 
   else {
     return `Error: ${currentState}: ${stateMap[currentState][0].error}`;
