@@ -20,10 +20,8 @@ const stateMap = {
   ],
  };
 
-// Resto del código sin cambios
-
 function validateVariableDeclaration(input) {
-  let currentState = "qe"; // Estado inicial
+  let currentState = "qe"; 
   const lines = input.split('\n');
 
   for (const line of lines) {
