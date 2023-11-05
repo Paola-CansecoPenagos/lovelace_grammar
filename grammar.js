@@ -13,7 +13,7 @@ const stateMap = {
     {
       nextState: "qfw",
       error: "Nombre de variable no válido",
-      rule: /^\(".*?"\)\.write$|^\(".*?"\s+.*?"\)\.write$/,
+      rule: /^(\(".*?"\)\.write$|\([a-z][a-z0-9_]*\)\.write)$/,
     },
     
   ],
