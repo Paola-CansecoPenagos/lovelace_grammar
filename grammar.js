@@ -46,6 +46,12 @@ const stateMap = {
       error: "Palabra reservada mal escrita",
       rule: /^while$/,
     },
+    {
+      nextState: "q17",
+      error: "Nombre de variable no válido",
+      rule: /^[a-z][a-z0-9_]*$/,
+    },
+
   ],
   "q010": [
     {
@@ -317,7 +323,38 @@ const stateMap = {
       error: "Palabra reservada no válido",
       rule: /^exit$/,
     },
-  ]
+  ],
+  "q17": [
+    {
+      nextState: "q18",
+      error: "Operador no válido",
+      rule: /^=$/,
+    }
+  ],
+  "q18": [
+    {
+      nextState: "q19",
+      error: "Valor no válido",
+      rule: /^([0-9]*|[0-9]*.[0-9]*|true|false|".*")$/,
+    },
+    {
+      nextState: "q19",
+      error: "Valor no válido",
+      rule: /^".*$/
+    },
+  ],
+  "q19": [
+    {
+      nextState: "q20",
+      error: "Valor no válido o hace falta comillas",
+      rule: /^[^"]*"$/
+    },
+    {
+      nextState: "q19",
+      error: "Palabra no válido",
+      rule: /^[^"]+$/
+    }
+  ],
  };
 
 function validateVariableDeclaration(input) {
@@ -331,7 +368,7 @@ function validateVariableDeclaration(input) {
       if (nextState === "q0-error") {
         return `Error: ${currentState}: ${stateMap[currentState][0].error}`;
       }
-      if ((currentState === "q1" && token.endsWith('_'))||(currentState === "q010" && token.endsWith('_')) ||(currentState === "q020" && token.endsWith('_'))||(currentState === "q030" && token.endsWith('_')) ||(currentState === "q040" && token.endsWith('_'))) {
+      if ((currentState === "q1" && token.endsWith('_'))||(currentState === "q010" && token.endsWith('_')) ||(currentState === "q020" && token.endsWith('_'))||(currentState === "q030" && token.endsWith('_')) ||(currentState === "q040" && token.endsWith('_'))||(currentState === "qe" && token.endsWith('_'))) {
         return `Error: Nombre de variable no puede terminar en '_'`;
       }
       currentState = nextState;
@@ -343,6 +380,9 @@ function validateVariableDeclaration(input) {
   } 
   if (currentState === "q013" || currentState === "q023" || currentState === "q033" || currentState === "q043") {
     return "Declaración e inicializacion de variable válido";
+  } 
+  if (currentState === "q19"||currentState === "q20") {
+    return "Inicialización de variable válido";
   } 
   if (currentState === "qfr") {
     return "Leer variable válido";
