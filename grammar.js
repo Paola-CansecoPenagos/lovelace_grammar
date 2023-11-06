@@ -225,7 +225,32 @@ const stateMap = {
     {
       nextState: "q4",
       error: "Cierre y apertura no válido",
-      rule: /^\(\)\{$/,
+      rule: /^(\(\){$|^\([a-z][a-z0-9_]*\){)$/
+    },
+    {
+      nextState: "q003",
+      error: "Cierre y apertura no válido",
+      rule: /^\([a-z][a-z0-9_]*$/
+    }
+  ],
+  "q003":[
+    {
+      nextState: "q004",
+      error: "Separacion de variables no válido",
+      rule: /^,$/,
+    }
+  ],
+  "q004":[
+    {
+      nextState: "q4",
+      error: "Cierre y apertura no válido",
+      rule: /^[a-z][a-z0-9_]*\){$/
+    },
+    {
+      nextState: "q003",
+      error: "Cierre y apertura no válido",
+      rule: /^[a-z][a-z0-9_]*$/
+
     }
   ],
   "q4": [
