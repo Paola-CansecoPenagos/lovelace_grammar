@@ -23,12 +23,12 @@ const stateMap = {
 
     {
       nextState: "qfr",
-      error: "Nombre de variable no válido",
+      error: "Nombre de variable no válido o palabra reservada mal escrita",
       rule: /^([a-z][a-z0-9_]*)(.read)$/,
     },
     {
       nextState: "qfw",
-      error: "Nombre de variable no válido",
+      error: "Nombre de variable no válido o palabra reservada mal escrita",
       rule: /^(\(".*?"\)\.write$|\([a-z][a-z0-9_]*\)\.write)$/,
     },
     {
@@ -57,7 +57,7 @@ const stateMap = {
   "q011": [
     {
       nextState: "q012",
-      error: "Nombre de variable no válido",
+      error: "Operador no válido",
       rule: /^=$/,
     },
     {
@@ -69,7 +69,7 @@ const stateMap = {
   "q012": [
     {
       nextState: "q013",
-      error: "Nombre de variable no válido",
+      error: "Valor no válido",
       rule: /^[0-9]*$/,
     },
   ],
@@ -90,7 +90,7 @@ const stateMap = {
   "q021": [
     {
       nextState: "q022",
-      error: "Nombre de variable no válido",
+      error: "Operador no válido",
       rule: /^=$/,
     },
     {
@@ -102,7 +102,7 @@ const stateMap = {
   "q022": [
     {
       nextState: "q023",
-      error: "Nombre de variable no válido",
+      error: "Valor no válido",
       rule: /^[0-9]*.[0-9]*$/,
     },
   ],
@@ -123,7 +123,7 @@ const stateMap = {
   "q031": [
     {
       nextState: "q032",
-      error: "Nombre de variable no válido",
+      error: "Operador no válido",
       rule: /^=$/,
     },
     {
@@ -156,7 +156,7 @@ const stateMap = {
   "q041": [
     {
       nextState: "q042",
-      error: "Nombre de variable no válido",
+      error: "Operador no válido",
       rule: /^=$/,
     },
     {
@@ -187,7 +187,7 @@ const stateMap = {
   "q044": [
     {
       nextState: "q043",
-      error: "Segunda palabra no válido",
+      error: "Valor no válido o hace falta comillas",
       rule: /^[^"]*"$/
     },
     {
@@ -213,26 +213,26 @@ const stateMap = {
   "q3":[
     {
       nextState: "q4",
-      error: "Nombre de variable no válido",
+      error: "Cierre y apertura no válido",
       rule: /^\(\)\{$/,
     }
   ],
   "q4": [
     {
       nextState: "q5",
-      error: "Nombre de variable no válido",
+      error: "Nombre de variable no válido o palabra reservada mal escrita",
       rule: /^([a-z][a-z0-9_]*)(.read)$/,
     },
     {
       nextState: "q5",
-      error: "Nombre de variable no válido",
+      error: "Nombre de variable no válido o palabra reservada mal escrita",
       rule: /^(\(".*?"\)\.write$|\([a-z][a-z0-9_]*\)\.write)$/,
     },
   ],
   "q5": [
     {
       nextState: "qff",
-      error: "Nombre de variable no válido",
+      error: "Cierre no válido",
       rule: /^\}$/,
     },
   ],
@@ -267,12 +267,12 @@ const stateMap = {
   "q10": [
     {
       nextState: "q8",
-      error: "Nombre de variable no válido",
+      error: "Case no válido",
       rule: /^case_[a-z][a-z0-9_]*\($/,
     },
     {
       nextState: "q11",
-      error: "Nombre de variable no válido",
+      error: "Palabra reservada mal escrita",
       rule: /^exit$/,
     },
   ],
@@ -293,21 +293,21 @@ const stateMap = {
   "q13": [
     {
       nextState: "q14",
-      error: "Nombre de variable de switch no válido",
+      error: "Operador no válido",
       rule: /^==$/,
     },
   ],
   "q14": [
     {
       nextState: "q15",
-      error: "Nombre de variable de switch no válido",
+      error: "Valor no válido",
       rule: /^(true\)|false\){)$/
     },
   ],
   "q15": [
     {
       nextState: "q16",
-      error: "Contenido de while no válido",
+      error: "Introducción no válido",
       rule: /^(\(".*?"\)\.write$|\([a-z][a-z0-9_]*\)\.write|([a-z][a-z0-9_]*)(.read))$/,
     },
   ],
