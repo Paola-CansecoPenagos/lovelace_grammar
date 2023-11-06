@@ -41,6 +41,11 @@ const stateMap = {
       error: "Palabra reservada mal escrita",
       rule: /^switch$/,
     },
+    {
+      nextState: "q12",
+      error: "Palabra reservada mal escrita",
+      rule: /^while$/,
+    },
   ],
   "q1": [
     {
@@ -125,8 +130,43 @@ const stateMap = {
   "q11": [
     {
       nextState: "qfs",
-      error: "Nombre de variable no válido",
+      error: "Cierre no válido",
       rule: /}$/,
+    },
+  ],
+  "q12": [
+    {
+      nextState: "q13",
+      error: "Nombre de variable de switch no válido",
+      rule: /^\([a-z][a-z0-9_]*$/,
+    },
+  ],
+  "q13": [
+    {
+      nextState: "q14",
+      error: "Nombre de variable de switch no válido",
+      rule: /^==$/,
+    },
+  ],
+  "q14": [
+    {
+      nextState: "q15",
+      error: "Nombre de variable de switch no válido",
+      rule: /^(true\)|false\){)$/
+    },
+  ],
+  "q15": [
+    {
+      nextState: "q16",
+      error: "Contenido de while no válido",
+      rule: /^(\(".*?"\)\.write$|\([a-z][a-z0-9_]*\)\.write|([a-z][a-z0-9_]*)(.read))$/,
+    },
+  ],
+  "q16": [
+    {
+      nextState: "q11",
+      error: "Palabra reservada no válido",
+      rule: /^exit$/,
     },
   ]
  };
@@ -162,7 +202,10 @@ function validateVariableDeclaration(input) {
     return "Declaración de función válido";
   } 
   if (currentState === "qfs") {
-    return "Declaración de switch válido";
+    return "Declaración de funcion de sentencia válido";
+  } 
+  if (currentState === "qfh") {
+    return "Declaración de while válido";
   } 
   else {
     return `Error: ${currentState}: ${stateMap[currentState][0].error}`;
