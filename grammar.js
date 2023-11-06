@@ -32,6 +32,11 @@ const stateMap = {
       rule: /^(\(".*?"\)\.write$|\([a-z][a-z0-9_]*\)\.write)$/,
     },
     {
+      nextState: "q20",
+      error: "Nombre de variable no válido o palabra reservada mal escrita",
+      rule: /^\(".*$/
+    },
+    {
       nextState: "q2",
       error: "Palabra reservada mal escrita",
       rule: /^fnc$/,
@@ -227,13 +232,25 @@ const stateMap = {
     {
       nextState: "q5",
       error: "Nombre de variable no válido o palabra reservada mal escrita",
-      rule: /^([a-z][a-z0-9_]*)(.read)$/,
+      rule: /^(\(".*?"\)\.write$|\([a-z][a-z0-9_]*\)\.write|([a-z][a-z0-9_]*)(.read))$/,
     },
     {
-      nextState: "q5",
-      error: "Nombre de variable no válido o palabra reservada mal escrita",
-      rule: /^(\(".*?"\)\.write$|\([a-z][a-z0-9_]*\)\.write)$/,
+      nextState: "q050",
+      error: "Nombre de variable no válido o inicio mal escrito",
+      rule: /^\(".*$/
     },
+  ],
+  "q050": [
+    {
+      nextState: "q5",
+      error: "Palabra no válida o cierre incorrecto",
+      rule: /^[^"]*"\)\.write$/
+    },
+    {
+      nextState: "q050",
+      error: "Palabra no válido",
+      rule: /^[^"]+$/
+    }
   ],
   "q5": [
     {
@@ -262,6 +279,23 @@ const stateMap = {
       error: "Introducción no válido",
       rule: /^(\(".*?"\)\.write$|\([a-z][a-z0-9_]*\)\.write|([a-z][a-z0-9_]*)(.read))$/,
     },
+    {
+      nextState: "q090",
+      error: "Nombre de variable no válido o inicio mal escrito",
+      rule: /^\(".*$/
+    },
+  ],
+  "q090": [
+    {
+      nextState: "q9",
+      error: "Palabra no válida o cierre incorrecto",
+      rule: /^[^"]*"\)\.write$/
+    },
+    {
+      nextState: "q090",
+      error: "Palabra no válido",
+      rule: /^[^"]+$/
+    }
   ],
   "q9": [
     {
@@ -316,6 +350,24 @@ const stateMap = {
       error: "Introducción no válido",
       rule: /^(\(".*?"\)\.write$|\([a-z][a-z0-9_]*\)\.write|([a-z][a-z0-9_]*)(.read))$/,
     },
+    {
+      nextState: "q016",
+      error: "Nombre de variable no válido o inicio mal escrito",
+      rule: /^\(".*$/
+    },
+
+  ],
+  "q016": [
+    {
+      nextState: "q16",
+      error: "Palabra no válida o cierre incorrecto",
+      rule: /^[^"]*"\)\.write$/
+    },
+    {
+      nextState: "q016",
+      error: "Palabra no válido",
+      rule: /^[^"]+$/
+    }
   ],
   "q16": [
     {
@@ -351,6 +403,18 @@ const stateMap = {
     },
     {
       nextState: "q19",
+      error: "Palabra no válido",
+      rule: /^[^"]+$/
+    }
+  ],
+  "q20": [
+    {
+      nextState: "qfw",
+      error: "Palabra no válida o cierre incorrecto",
+      rule: /^[^"]*"\)\.write$/
+    },
+    {
+      nextState: "q20",
       error: "Palabra no válido",
       rule: /^[^"]+$/
     }
