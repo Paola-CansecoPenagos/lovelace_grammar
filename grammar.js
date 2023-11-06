@@ -1,22 +1,22 @@
 const stateMap = {
   "qe": [
     {
-      nextState: "q1",
+      nextState: "q010",
       error: "Palabra reservada mal escrita",
       rule: /^int$/,
     },
     {
-      nextState: "q1",
+      nextState: "q020",
       error: "Palabra reservada mal escrita",
       rule: /^float$/,
     },
     {
-      nextState: "q1",
+      nextState: "q030",
       error: "Palabra reservada mal escrita",
       rule: /^bool$/,
     },
     {
-      nextState: "q1",
+      nextState: "q040",
       error: "Palabra reservada mal escrita",
       rule: /^string$/,
     },
@@ -46,6 +46,155 @@ const stateMap = {
       error: "Palabra reservada mal escrita",
       rule: /^while$/,
     },
+  ],
+  "q010": [
+    {
+      nextState: "q011",
+      error: "Nombre de variable no válido",
+      rule: /^[a-z][a-z0-9_]*$/,
+    },
+  ],
+  "q011": [
+    {
+      nextState: "q012",
+      error: "Nombre de variable no válido",
+      rule: /^=$/,
+    },
+    {
+      nextState: "q010",
+      error: "Separacion de variables no válido",
+      rule: /^,$/,
+    }
+  ],
+  "q012": [
+    {
+      nextState: "q013",
+      error: "Nombre de variable no válido",
+      rule: /^[0-9]*$/,
+    },
+  ],
+  "q013": [
+    {
+      nextState: "q010",
+      error: "Separacion de variables no válido",
+      rule: /^,$/,
+    }
+  ],
+  "q020": [
+    {
+      nextState: "q021",
+      error: "Nombre de variable no válido",
+      rule: /^[a-z][a-z0-9_]*$/,
+    },
+  ],
+  "q021": [
+    {
+      nextState: "q022",
+      error: "Nombre de variable no válido",
+      rule: /^=$/,
+    },
+    {
+      nextState: "q020",
+      error: "Separacion de variables no válido",
+      rule: /^,$/,
+    }
+  ],
+  "q022": [
+    {
+      nextState: "q023",
+      error: "Nombre de variable no válido",
+      rule: /^[0-9]*.[0-9]*$/,
+    },
+  ],
+  "q023": [
+    {
+      nextState: "q020",
+      error: "Separacion de variables no válido",
+      rule: /^,$/,
+    }
+  ],
+  "q030": [
+    {
+      nextState: "q031",
+      error: "Nombre de variable no válido",
+      rule: /^[a-z][a-z0-9_]*$/,
+    },
+  ],
+  "q031": [
+    {
+      nextState: "q032",
+      error: "Nombre de variable no válido",
+      rule: /^=$/,
+    },
+    {
+      nextState: "q030",
+      error: "Separacion de variables no válido",
+      rule: /^,$/,
+    }
+  ],
+  "q032": [
+    {
+      nextState: "q033",
+      error: "Valor no válido",
+      rule: /^(true|false)*$/,
+    },
+  ],
+  "q033": [
+    {
+      nextState: "q030",
+      error: "Separacion de variables no válido",
+      rule: /^,$/,
+    }
+  ],
+  "q040": [
+    {
+      nextState: "q041",
+      error: "Nombre de variable no válido",
+      rule: /^[a-z][a-z0-9_]*$/,
+    },
+  ],
+  "q041": [
+    {
+      nextState: "q042",
+      error: "Nombre de variable no válido",
+      rule: /^=$/,
+    },
+    {
+      nextState: "q040",
+      error: "Separacion de variables no válido",
+      rule: /^,$/,
+    }
+  ],
+  "q042": [
+    {
+      nextState: "q043",
+      error: "Valor no válido",
+      rule: /^".*"$/
+    },
+    {
+      nextState: "q044",
+      error: "Valor no válido",
+      rule: /^".*$/
+    },
+  ],
+  "q043": [
+    {
+      nextState: "q040",
+      error: "Separacion de variables no válido",
+      rule: /^,$/,
+    }
+  ],
+  "q044": [
+    {
+      nextState: "q043",
+      error: "Segunda palabra no válido",
+      rule: /^[^"]*"$/
+    },
+    {
+      nextState: "q044",
+      error: "Palabra no válido",
+      rule: /^[^"]+$/
+    }
   ],
   "q1": [
     {
@@ -182,15 +331,18 @@ function validateVariableDeclaration(input) {
       if (nextState === "q0-error") {
         return `Error: ${currentState}: ${stateMap[currentState][0].error}`;
       }
-      if (currentState === "q1" && token.endsWith('_')) {
+      if ((currentState === "q1" && token.endsWith('_'))||(currentState === "q010" && token.endsWith('_')) ||(currentState === "q020" && token.endsWith('_'))||(currentState === "q030" && token.endsWith('_')) ||(currentState === "q040" && token.endsWith('_'))) {
         return `Error: Nombre de variable no puede terminar en '_'`;
       }
       currentState = nextState;
     }
   }
 
-  if (currentState === "qfd") {
+  if (currentState === "qfd" || currentState === "q011" || currentState === "q021"|| currentState === "q031"|| currentState === "q041") {
     return "Declaración de variable válida";
+  } 
+  if (currentState === "q013" || currentState === "q023" || currentState === "q033" || currentState === "q043") {
+    return "Declaración e inicializacion de variable válido";
   } 
   if (currentState === "qfr") {
     return "Leer variable válido";
@@ -203,9 +355,6 @@ function validateVariableDeclaration(input) {
   } 
   if (currentState === "qfs") {
     return "Declaración de funcion de sentencia válido";
-  } 
-  if (currentState === "qfh") {
-    return "Declaración de while válido";
   } 
   else {
     return `Error: ${currentState}: ${stateMap[currentState][0].error}`;
