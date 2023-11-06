@@ -3,8 +3,24 @@ const stateMap = {
     {
       nextState: "q1",
       error: "Palabra reservada mal escrita",
-      rule: /^(int|float|bool|string)$/,
+      rule: /^int$/,
     },
+    {
+      nextState: "q1",
+      error: "Palabra reservada mal escrita",
+      rule: /^float$/,
+    },
+    {
+      nextState: "q1",
+      error: "Palabra reservada mal escrita",
+      rule: /^bool$/,
+    },
+    {
+      nextState: "q1",
+      error: "Palabra reservada mal escrita",
+      rule: /^string$/,
+    },
+
     {
       nextState: "qfr",
       error: "Nombre de variable no válido",
@@ -18,9 +34,13 @@ const stateMap = {
     {
       nextState: "q2",
       error: "Palabra reservada mal escrita",
-      rule: /^(fnc)$/,
+      rule: /^fnc$/,
     },
-
+    {
+      nextState: "q6",
+      error: "Palabra reservada mal escrita",
+      rule: /^switch$/,
+    },
   ],
   "q1": [
     {
@@ -61,6 +81,53 @@ const stateMap = {
       error: "Nombre de variable no válido",
       rule: /^\}$/,
     },
+  ],
+  "q6": [
+    {
+      nextState: "q7",
+      error: "Nombre de variable de switch no válido",
+      rule: /^\([a-z][a-z0-9_]*\){$/,
+    },
+  ],
+  "q7": [
+    {
+      nextState: "q8",
+      error: "Case no válido",
+      rule: /^case_[a-z][a-z0-9_]*\($/,
+    },
+  ],
+  "q8": [
+    {
+      nextState: "q9",
+      error: "Introducción no válido",
+      rule: /^(\(".*?"\)\.write$|\([a-z][a-z0-9_]*\)\.write|([a-z][a-z0-9_]*)(.read))$/,
+    },
+  ],
+  "q9": [
+    {
+      nextState: "q10",
+      error: "Cierre no válido",
+      rule: /\)$/,
+    },
+  ],
+  "q10": [
+    {
+      nextState: "q8",
+      error: "Nombre de variable no válido",
+      rule: /^case_[a-z][a-z0-9_]*\($/,
+    },
+    {
+      nextState: "q11",
+      error: "Nombre de variable no válido",
+      rule: /^exit$/,
+    },
+  ],
+  "q11": [
+    {
+      nextState: "qfs",
+      error: "Nombre de variable no válido",
+      rule: /}$/,
+    },
   ]
  };
 
@@ -94,6 +161,9 @@ function validateVariableDeclaration(input) {
   if (currentState === "qff") {
     return "Declaración de función válido";
   } 
+  if (currentState === "qfs") {
+    return "Declaración de switch válido";
+  } 
   else {
     return `Error: ${currentState}: ${stateMap[currentState][0].error}`;
   }
@@ -118,7 +188,7 @@ const rl = readline.createInterface({
   output: process.stdout
 });
 
-rl.question('Ingrese la declaración de variable: ', (input) => {
+rl.question('Ingrese el bloque de codigo: ', (input) => {
   const result = validateVariableDeclaration(input);
   console.log(result);
   rl.close();
